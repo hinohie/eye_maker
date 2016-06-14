@@ -14,14 +14,12 @@
 	do { \
 		char buf[256];\
 		sprintf(buf, "F:/Image/Src/%s",name);\
-		sprintf(buf, "../image_example/%s",name);\
 		##img = cvLoadImage(buf); \
 	}while(0);
 #define SAVE_IMAGE(img,name) \
 	do { \
 		char buf[256]; \
 		sprintf(buf, "F:/Image/Dst/%s",name);\
-		sprintf(buf, "../result_example/%s",name);\
 		cvSaveImage(buf , ##img); \
 	}while(0);
 
