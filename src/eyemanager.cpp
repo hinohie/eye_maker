@@ -1,6 +1,6 @@
 #include "eyemanager.h"
 
-EyeManager::EyeManager(IplImage *eye_dst, IplImage *eye_src, IplImage *_eye, vector<vector2d> &_eye_vec,IplImage *img, vector2f _dir)
+EyeManager::EyeManager(IplImage *eye_dst, IplImage *eye_src, IplImage *_eye, vector<vector2d> &_eye_vec,IplImage *img, vector2f _dir, double _build_range)
 {
 	int i, j;
 	int height = cvGetSize(eye_dst).height;
@@ -30,6 +30,8 @@ EyeManager::EyeManager(IplImage *eye_dst, IplImage *eye_src, IplImage *_eye, vec
 	cvCopy(_eye, eye);
 	for(i=0;i<_eye_vec.size(); i++)
 		eye_vec.push_back(_eye_vec[i]);
+
+	build_range = _build_range;
 
 	build();
 	ijk_init = false;
@@ -93,7 +95,7 @@ void EyeManager::build()
 	double *sr_min = new double[src.size()];
 	double *sr_max = new double[src.size()];
 
-	double range = 0.05;
+	double range = build_range;
 
 	// make min_max range
 

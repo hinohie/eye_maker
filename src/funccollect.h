@@ -24,6 +24,6 @@
 	}while(0);
 
 
-void semi_main(IplImage *img);
+void semi_main(IplImage *img, double cursor_size = 5, double build_range = 0.05);
 
 #endif

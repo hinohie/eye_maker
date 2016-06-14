@@ -1,0 +1,14 @@
+// read data line by line. // is comment
+// image_filepath : source image file path. string
+// image_width : control source image width. 0 mean depend on "image_height". integer
+// image_height : control source image height. 0 mean depend on "image_width". integer
+// cursor_size : selecting cursor's radius. double
+// build_range : see void EyeManager::build() function. double with [0..1].
+
+image_filepath : F:/Code/VS2012/git_repo/eye_maker/trunk/image_example/keylockip.png
+image_width : 500
+image_height : 0
+
+cursor_size : 3
+
+build_range : 0.05

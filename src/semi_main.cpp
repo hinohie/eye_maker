@@ -6,10 +6,14 @@ class GCApplication
 {
 public:
 	double thickness;
+	double pre_thickness;
+	double build_range;
+	double pre_build_range;
+
 	void reset();
 	void clear();
 	void process();
-	void setImageAndWinName( IplImage *_image,string _winName );
+	void setImageAndWinName(IplImage *_image, string _winName, double _pre_thickness, double _build_range);
     void showImage();
     void mouseClick( int event, int x, int y, int flags, void* param );
 	void maskAdd(int si,int sj);
@@ -55,7 +59,8 @@ void GCApplication::reset()
 	cvSet(mask, cvScalar(0));
 	cvSet(new_mask, cvScalar(0));
 	mask_type = -1;
-	thickness = 5;
+	thickness = pre_thickness;
+	build_range = pre_build_range;
 
 	cvSet(eye, cvScalar(0));
 	cvSet(eye_src, cvScalar(0));
@@ -65,7 +70,7 @@ void GCApplication::reset()
 	tt=0;
 }
 
-void GCApplication::setImageAndWinName( IplImage *_image, string _winName  )
+void GCApplication::setImageAndWinName( IplImage *_image, string _winName , double _pre_thickness, double _build_range )
 {
     if( _image == NULL || _winName.empty() )
         return;
@@ -82,6 +87,9 @@ void GCApplication::setImageAndWinName( IplImage *_image, string _winName  )
 
 	height = image->height;
 	width = image->width;
+
+	pre_thickness = _pre_thickness;
+	pre_build_range = _build_range;
 	
 	eye = cvCreateImage(cvGetSize(_image),8,1);
 	eye_dst = cvCreateImage(cvGetSize(_image),8,1);
@@ -169,11 +177,11 @@ void GCApplication::showImage()
 		if(nt > 0.8) nt = 1;
 		else if(nt < 0.6) nt = 0;
 		else nt = (nt - 0.6)*5;
-		
+		/*
 		while(tt > 4)tt-=4;
 		nt = 1.0 / 4 * (tt-2) * ( tt-2);
 		nt = (nt < 0.9 && nt > 0.7)?1:0;
-		
+		*/
 		for(int i=0; i<manager.size(); i++)
 			manager[i]->update_image(img,nt);
 	}
@@ -571,7 +579,7 @@ void GCApplication::phase_up()
 		printf("%lf %lf\n",dir.x,dir.y);
 		cvSet(new_mask,cvScalar(0));
 		{
-		EyeManager *curm = new EyeManager(eye_dst, eye_src,eye,eye_vec,image,dir);
+		EyeManager *curm = new EyeManager(eye_dst, eye_src,eye,eye_vec,image,dir,build_range);
 		curm->sal_col = find_near_sal();
 		manager.push_back(curm);
 		}
@@ -590,14 +598,14 @@ static void onMouse( int even, int x, int y, int flags, void* param )
 {
     ((GCApplication *)param)->mouseClick( even, x, y, flags, param );
 }
-void semi_main(IplImage *img)
+void semi_main(IplImage *img, double cursor_size, double build_range)
 {
 	GCApplication gca;
 	string win_name = "Active";
 	cvNamedWindow(win_name.c_str(), CV_WINDOW_AUTOSIZE);
 
     cvSetMouseCallback( win_name.c_str(), onMouse, &gca );
-	gca.setImageAndWinName(img, win_name);
+	gca.setImageAndWinName(img, win_name, cursor_size, build_range);
 
 	gca.showImage();
 

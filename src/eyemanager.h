@@ -21,9 +21,10 @@ public:
 
 	IplImage *eye;
 	vector<vector2d> eye_vec;
+	double build_range;
 
 	EyeManager(){}
-	EyeManager(IplImage *eye_dst, IplImage *eye_src, IplImage *eye, vector<vector2d> &_eye_vec,IplImage *img, vector2f _dir);
+	EyeManager(IplImage *eye_dst, IplImage *eye_src, IplImage *eye, vector<vector2d> &_eye_vec,IplImage *img, vector2f _dir, double _build_range);
 
 	void build();
 	void update_image(IplImage *img,double t);
